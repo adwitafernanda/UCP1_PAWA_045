@@ -1,11 +1,36 @@
 <%- include('partials/header') %>
 
-<div class="container">
-  <h1>Selamat Datang di Website Kolam Renang</h1>
-  <p>Ini adalah halaman utama. Anda dapat mengelola pengunjung kolam renang di sini.</p>
-  
-  <a href="/pengunjung" class="btn btn-primary">Lihat Daftar Pengunjung</a>
-  <a href="/pengunjung/add" class="btn btn-success">Tambah Pengunjung</a>
+<!-- Banner Section -->
+<div class="banner text-center bg-primary text-white py-5">
+  <h1 class="display-3">Selamat Datang di Website Kolam Renang</h1>
+  <p class="lead mb-4">Kelola pengunjung kolam renang dengan mudah dan efisien.</p>
+
+  <!-- Tombol Navigasi di Banner -->
+  <div class="d-flex justify-content-center">
+    <a href="/pengunjung" class="btn btn-light btn-lg mx-3">Lihat Daftar Pengunjung</a>
+    <a href="/pengunjung/add" class="btn btn-success btn-lg mx-3">Tambah Pengunjung</a>
+  </div>
+</div>
+
+<!-- Deskripsi Section -->
+<div class="container my-5">
+  <h2 class="text-center mb-4">Tentang Website Kolam Renang</h2>
+  <p class="lead text-center mb-5">
+    Website ini memudahkan Anda dalam mengelola pengunjung kolam renang. Anda dapat menambahkan pengunjung baru, mengedit data pengunjung yang ada, serta menghapus pengunjung yang sudah tidak lagi menggunakan fasilitas kolam renang. Ayo kelola pengunjung dengan lebih mudah!
+  </p>
+
+  <!-- Gambar Kolam Renang -->
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <img src="https://th.bing.com/th/id/OIP.RoZmGbI-FJHeaPcq2f-ZPAHaHa?rs=1&pid=ImgDetMain" class="img-fluid rounded shadow" alt="Kolam Renang 1">
+    </div>
+    <div class="col-md-4 mb-4">
+      <img src="https://th.bing.com/th/id/OIP.RoZmGbI-FJHeaPcq2f-ZPAHaHa?rs=1&pid=ImgDetMain" class="img-fluid rounded shadow" alt="Kolam Renang 2">
+    </div>
+    <div class="col-md-4 mb-4">
+      <img src="https://th.bing.com/th/id/OIP.RoZmGbI-FJHeaPcq2f-ZPAHaHa?rs=1&pid=ImgDetMain" class="img-fluid rounded shadow" alt="Kolam Renang 3">
+    </div>
+  </div>
 </div>
 
 <%- include('partials/footer') %>

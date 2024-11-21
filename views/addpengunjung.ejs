@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+
+<h1>Tambah Pengunjung Kolam Renang</h1>
+
+<form action="/pengunjung/add" method="POST">
+  <div class="form-group">
+    <label for="nama">Nama Pengunjung</label>
+    <input type="text" class="form-control" id="nama" name="nama" required>
+  </div>
+  <div class="form-group">
+    <label for="harga">Harga Pengunjung</label>
+    <input type="number" class="form-control" id="harga" name="harga" required>
+  </div>
+  <button type="submit" class="btn btn-success mt-3">Tambah Pengunjung</button>
+</form>
+
+<%- include('partials/footer') %>

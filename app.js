@@ -1,58 +1,26 @@
-const express = require('express'); // Mengimport express
+const express = require("express");
 const app = express();
-// const todoRouters = require('./routes/todo.js'); //server
-const todoRouters = require('./routes/tododb.js'); // lokal
-require('dotenv').config();
-const port = process.env.PORT;
-const db = require('./database/db');
-const expressLayouts = require('express-ejs-layouts')
-const session = require('express-session');
-// Mengimpor middleware
-const authRoutes = require('./routes/authRoutes');
-const { isAuthenticated } = require('./middlewares/middleware.js');
+const path = require("path");
+const bodyParser = require("body-parser");
 
-app.use(expressLayouts);
-app.use(express.json());
+// Set view engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
+// Middleware untuk parsing body form
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.use('/todos',todoRouters);
-app.set('view engine', 'ejs')
+// Route untuk pengunjung
+const pengunjungRoutes = require("./routes/pengunjung");
+app.use("/pengunjung", pengunjungRoutes);
 
-app.use(express.urlencoded({ extended: true }));
+// Route untuk halaman utama (index)
+app.get('/', (req, res) => {
+    res.render('index', { title: 'Halaman Utama' });
+  })
 
-// Konfigurasi express-session
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your_secret_key', // Gunakan secret key yang aman
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Set ke true jika menggunakan HTTPS
-}));
-
-app.use('/', authRoutes);
-
-
-app.get('/', isAuthenticated, (req, res) => {
-    res.render('index', {
-        layout: 'layouts/main-layout'
-    }); // Mengirimkan respons "Hello, World!" ketika root URL diakses
-});
-
-app.get('/contact', isAuthenticated, (req, res) => {
-    res.render('contact',{
-        layout: 'layouts/main-layout'
-    });
-});
-
-app.get('/todo-view', isAuthenticated ,(req, res) => {
-    db.query('SELECT * FROM todos', (err, todos) => {
-        if (err) return res.status(500).send('Internal Server Error');
-        res.render('todo', {
-            layout: 'layouts/main-layout',
-            todos: todos
-        });
-    });
-});
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
+// Port server
+app.listen(3000, () => {
+  console.log("Server berjalan di http://localhost:3000");
 });

@@ -1,0 +1,119 @@
+<%- include('partials/header') %>
+
+<h1>Daftar Pengunjung Kolam Renang</h1>
+
+<!-- Tombol untuk menambahkan pengunjung -->
+<a href="/pengunjung/add" class="btn btn-success mb-3">Tambah Pengunjung</a>
+
+<!-- Tabel Daftar Pengunjung -->
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>Harga</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% pengunjung.forEach(item => { %>
+      <tr>
+        <td><%= item.nama %></td>
+        <td><%= item.harga %></td>
+        <td>
+          <button class="btn btn-warning btn-edit" data-id="<%= item.id %>" data-nama="<%= item.nama %>" data-harga="<%= item.harga %>">Edit</button>
+          <button class="btn btn-danger btn-delete" data-id="<%= item.id %>">Hapus</button>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Edit pengunjung menggunakan SweetAlert
+  document.querySelectorAll('.btn-edit').forEach(button => {
+    button.addEventListener('click', (event) => {
+      const id = event.target.getAttribute('data-id');
+      const nama = event.target.getAttribute('data-nama');
+      const harga = event.target.getAttribute('data-harga');
+      
+      Swal.fire({
+        title: 'Edit Pengunjung',
+        html: `
+          <input type="text" id="editNama" class="swal2-input" value="${nama}" placeholder="Nama Pengunjung">
+          <input type="number" id="editHarga" class="swal2-input" value="${harga}" placeholder="Harga Pengunjung">
+        `,
+        confirmButtonText: 'Update',
+        showCancelButton: true,
+        preConfirm: () => {
+          const updatedNama = document.getElementById('editNama').value;
+          const updatedHarga = document.getElementById('editHarga').value;
+
+          if (!updatedNama || !updatedHarga) {
+            Swal.showValidationMessage('Nama dan harga harus diisi');
+            return false;
+          }
+
+          return { id, nama: updatedNama, harga: updatedHarga };
+        }
+      }).then(result => {
+        if (result.isConfirmed) {
+          const { id, nama, harga } = result.value;
+          
+          // Kirim request PUT ke server untuk memperbarui pengunjung
+          fetch(`/pengunjung/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nama, harga })
+          })
+          .then(response => {
+            if (response.ok) {
+              Swal.fire('Berhasil!', 'Pengunjung berhasil diperbarui!', 'success').then(() => {
+                location.reload(); // Reload halaman setelah update
+              });
+            } else {
+              Swal.fire('Gagal!', 'Gagal memperbarui pengunjung.', 'error');
+            }
+          });
+        }
+      });
+    });
+  });
+
+  // Hapus pengunjung menggunakan SweetAlert
+  document.querySelectorAll('.btn-delete').forEach(button => {
+    button.addEventListener('click', (event) => {
+      const id = event.target.getAttribute('data-id');
+
+      Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Data ini akan dihapus permanen!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/pengunjung/${id}`, {
+            method: 'DELETE',
+          })
+          .then(response => {
+            if (response.ok) {
+              Swal.fire('Dihapus!', 'Pengunjung berhasil dihapus!', 'success').then(() => {
+                location.reload(); // Reload halaman setelah penghapusan
+              });
+            } else {
+              Swal.fire('Gagal!', 'Gagal menghapus pengunjung.', 'error');
+            }
+          });
+        }
+      });
+    });
+  });
+</script>
+
+<%- include('partials/footer') %>
